@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Heating Control System</title>
+    <meta charset="utf-8"/>
+
+    <meta name="author" content="Brian McGowan">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script src="js/jquery-2.2.3.min.js"></script>
+    <script src="js/moment.js"></script>
+    <script src="js/scripts.js"></script>
+</head>
+<body>
+<div class="main-body">
+    <div class="row center-block">
+        <div class="col-lg-12 title-text">
+            <h2>Heating Controller System</h2>
+            <hr>
+            <h4 id="message">Reading board data, please wait.......</h4>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-6 title-text">
+            <hr>
+            <h4>Current Room Temperature is: <span id="temperature"></span>&deg</h4>
+            <hr>
+        </div>
+        <div class="col-xs-12 col-md-6 col-lg-6 title-text">
+            <hr>
+            <h4>Heating has been running for <span id="time"></span></h4>
+            <hr>
+        </div>
+        <div class="col-xs-12">
+            <h4>
+                <small style="float:right;">If temperature goes above <span class="loadNum"></span>&deg heating will
+                    automaticaly
+                    switch off
+                </small>
+            </h4>
+            <hr style="margin-top:25px">
+        </div>
+        <div class="col-lg-12">
+            <form method="get">
+                <div class="button">
+                    <button type="submit" name="on" id="on" value="1" class="btn btn-lg btn-success btn-block">Turn On
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <form method="get">
+                <div class="button">
+                    <button type="submit" name="off" id="off" value="0" class="btn btn-lg btn-danger btn-block">Turn
+                        Off
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

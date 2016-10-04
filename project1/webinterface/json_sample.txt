@@ -1,0 +1,22 @@
+{
+  "status": 1,
+  "temp": 5.74,
+  "currentTime": 1117996,
+  "startTime": 1117989,
+  "elapsedTime": 0,
+  "baselineTemp": 12.50
+}
+
+
+{
+  "status": 0,
+  "temp": 6.80,
+  "currentTime": 1140576,
+  "startTime": 1117989,
+  "elapsedTime": 0,
+  "baselineTemp": 12.50
+}
+
+
+http://heatingcontroller.local/arduino/temp/0/12.5 sets the temp
+http://heatingcontroller.local/arduino/temp/0/ checks the temp state

@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>On | Heating Control System</title>
+        <meta charset="utf-8"/>
+
+        <meta name="author" content="Brian McGowan">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    </head>
+    <body>
+
+        <div class="main-body">
+            <div class="row center-block">
+                <div class="col-xs-12 title-text">
+                    <h3>Heating Controller System</h3>
+                    <hr>
+                    <p>Heating is currently switched off</p>
+                </div>
+                <div class="col-xs-12">
+                    <form action="on.html" method="get">
+                        <div class="button">
+                            <button type="submit" name="on" value="true" class="btn btn-lg btn-success btn-block">Turn On</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-xs-12">
+                    <form action="off.html" method="get">
+                        <div class="button">
+                            <button type="submit" name="off" value="true" class="btn btn-lg btn-danger btn-block disabled" disabled="true">Turn Off</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
