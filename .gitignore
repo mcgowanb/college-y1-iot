@@ -1,6 +1,6 @@
 # User-specific stuff:
 project1/.idea/*
-.idea/*
+**.idea
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries

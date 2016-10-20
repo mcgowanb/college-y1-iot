@@ -2,6 +2,8 @@
 #include <BridgeServer.h>
 #include <BridgeClient.h>
 #include <ArduinoJson.h>
+#include <Wire.h>
+#include "rgb_lcd.h"
 
 
 BridgeServer server;
@@ -9,7 +11,9 @@ unsigned long startTime;
 unsigned long elapsedTime;
 int actionValue;
 int oldValue;
-double baselineTemp = 21.0;
+double baselineTemp = 25.0;
+rgb_lcd lcd;
+const int pinButton = 5;
 
 
 void setup() {
@@ -18,6 +22,15 @@ void setup() {
   Bridge.begin();
   digitalWrite(13, HIGH);
   pinMode(8, OUTPUT); //relay pin
+  pinMode(4, OUTPUT); // LED
+  pinMode(pinButton, INPUT);
+
+
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Temp:");
+  lcd.setCursor(0, 1);
+  lcd.print("Status:");
 
   server.listenOnLocalhost();
   server.begin();
@@ -29,8 +42,10 @@ void loop() {
     process(client);
     client.stop();
   }
-  delay(50);
-
+  else {
+    checkBoardStatus();
+  }
+  delay(150);
 }
 
 void process(BridgeClient client) {
@@ -64,6 +79,7 @@ void digitalCommand(BridgeClient client) {
   if (client.read() == '/') {
     value = client.parseInt();
     digitalWrite(pin, value);
+    digitalWrite(4, value);
   } else {
     value = digitalRead(pin); // checking state of board here
   }
@@ -105,11 +121,19 @@ void digitalCommand(BridgeClient client) {
   root["elapsedTime"] = elapsedTime;
   root["baselineTemp"] = baselineTemp;
   root.prettyPrintTo(client);
+
+  lcd.setCursor(6, 0);
+  lcd.print(temp);
+
+  lcd.setCursor(8, 1);
+  lcd.print(convertStatusToText(value));
+
 }
 
 void checkTemperature(double Temp, int pin) {
   if (Temp > baselineTemp) {
     digitalWrite(pin, 0);
+    digitalWrite(4, 0);
     String key = String(pin);
     Bridge.put(key, String(actionValue));
   }
@@ -134,4 +158,55 @@ void calculteTemperature(BridgeClient client)
   // print the temperature:
 
   client.print(" &deg;C");
+}
+
+String convertStatusToText(int i) {
+  if (i) return "On ";
+  else return "Off";
+}
+
+void checkBoardStatus() {
+  int pin = 8;
+  int value = digitalRead(pin);
+  actionValue = (int)value;
+
+  if (digitalRead(pinButton))
+  {
+    actionValue = toggleStatus(actionValue);
+    digitalWrite(8, actionValue);
+    digitalWrite(4, actionValue);
+    delay(500);
+  }
+
+
+
+  char myData[1];
+  Bridge.get("8", myData, 1);
+
+  oldValue = (int)myData[0];
+
+  if ((oldValue == 48) && (actionValue == 1)) {
+    startTime = millis();
+  }
+
+  String key = String(pin);
+  Bridge.put(key, String(actionValue));
+
+  int sensorValue = analogRead(A1);
+  double temp = Thermister(sensorValue);
+  checkTemperature(temp, 8);
+  lcd.setCursor(6, 0);
+
+  lcd.print(temp);
+
+  lcd.setCursor(8, 1);
+  lcd.print(convertStatusToText(value));
+
+  lcd.setCursor(11, 0);
+  lcd.print((char)223);
+}
+
+int toggleStatus(int i) {
+  if (i == 1) return 0;
+  else return 1;
 }
