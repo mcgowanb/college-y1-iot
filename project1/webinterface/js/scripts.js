@@ -67,7 +67,7 @@ function pad(num, size) {
 function parseResponse(msg) {
     var result = $.parseJSON(msg);
     var t = convertMS(result.elapsedTime);
-    $("#temperature").text(result.temp);
+    $("#temperature").text(result.temp.toFixed(2));
     if (result.status == 1) {
         $("#" + on).attr("disabled", true);
         $("#" + off).attr("disabled", false);

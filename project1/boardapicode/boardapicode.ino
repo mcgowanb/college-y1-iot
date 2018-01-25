@@ -1,3 +1,4 @@
+
 #include <Bridge.h>
 #include <BridgeServer.h>
 #include <BridgeClient.h>
@@ -11,9 +12,12 @@ unsigned long startTime;
 unsigned long elapsedTime;
 int actionValue;
 int oldValue;
-double baselineTemp = 25.0;
+double baselineTemp = 30.0;
 rgb_lcd lcd;
 const int pinButton = 5;
+const int potentiometer = A2;
+
+
 
 
 void setup() {
@@ -30,13 +34,20 @@ void setup() {
   lcd.setCursor(0, 0);
   lcd.print("Temp:");
   lcd.setCursor(0, 1);
-  lcd.print("Status:");
+  //lcd.print("State:");
 
   server.listenOnLocalhost();
   server.begin();
 }
 
 void loop() {
+  //read value from potentiometer for dimming display
+  int outputValue = map(analogRead(potentiometer), 0, 1023, 0, 255);
+  lcd.setRGB(outputValue, outputValue ,outputValue);
+  lcd.setCursor(13, 1);
+  lcd.print(int(baselineTemp));
+  lcd.setCursor(15, 1);
+  lcd.print((char)223);
   BridgeClient client = server.accept();
   if (client) {
     process(client);
@@ -125,8 +136,8 @@ void digitalCommand(BridgeClient client) {
   lcd.setCursor(6, 0);
   lcd.print(temp);
 
-  lcd.setCursor(8, 1);
-  lcd.print(convertStatusToText(value));
+  //lcd.setCursor(7, 1);
+  //lcd.print(convertStatusToText(value));
 
 }
 
@@ -199,7 +210,7 @@ void checkBoardStatus() {
 
   lcd.print(temp);
 
-  lcd.setCursor(8, 1);
+  lcd.setCursor(0, 1);
   lcd.print(convertStatusToText(value));
 
   lcd.setCursor(11, 0);
